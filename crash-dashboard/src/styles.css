@@ -1,0 +1,27 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0c0c14;
+  --surface:    #13131f;
+  --surface2:   #1c1c2e;
+  --border:     #2a2a3e;
+  --accent:     #818cf8;
+  --accent-dim: rgba(129,140,248,.12);
+  --green:      #34d399;
+  --green-dim:  rgba(52,211,153,.12);
+  --pink:       #f472b6;
+  --pink-dim:   rgba(244,114,182,.12);
+  --orange:     #fb923c;
+  --orange-dim: rgba(251,146,60,.12);
+  --text:       #e2e8f0;
+  --muted:      #64748b;
+  --radius:     14px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}

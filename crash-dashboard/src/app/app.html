@@ -1,0 +1,157 @@
+<header class="header">
+  <span class="header-icon">&#9992;</span>
+  <div>
+    <div class="header-title">CrashData</div>
+    <div class="header-sub">Airplane Crashes &amp; Fatalities Since 1908</div>
+  </div>
+  <a class="api-link" href="http://localhost:5050/swagger" target="_blank">API Docs</a>
+</header>
+
+<main class="main">
+
+  @if (loading) {
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p>Loading data from API...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-wrap">
+      <div class="error-title">API Unreachable</div>
+      <pre class="error-msg">{{ error }}</pre>
+    </div>
+  }
+
+  @if (!loading && !error && summary) {
+
+    <div class="section-label">Overview</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Crashes</div>
+        <div class="stat-value c-accent">{{ fmt(summary.totalCrashes) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Fatalities</div>
+        <div class="stat-value c-pink">{{ fmt(summary.totalFatalities) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Aboard</div>
+        <div class="stat-value c-green">{{ fmt(summary.totalAboard) }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Fatality Rate</div>
+        <div class="stat-value c-orange">{{ summary.fatalityRatePct }}%</div>
+      </div>
+    </div>
+
+    <div class="section-label">Historical Trends</div>
+    <div class="chart-row">
+      <div class="card">
+        <div class="card-title">Crashes &amp; Fatalities by Decade</div>
+        <canvas #decadeCanvas></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Military vs Civilian Fatalities</div>
+        <canvas #milCivCanvas></canvas>
+      </div>
+    </div>
+
+    <div class="section-label">Top Operators</div>
+    <div class="card">
+      <div class="card-title">Top 10 Operators by Total Fatalities</div>
+      <canvas #operatorsCanvas height="90"></canvas>
+    </div>
+
+    <div class="section-label">Breakdowns</div>
+    <div class="table-row">
+      <div class="card">
+        <div class="card-title">Top 10 Operators</div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Operator</th><th>Crashes</th><th>Fatalities</th></tr>
+          </thead>
+          <tbody>
+            @for (row of operators; track row.operator; let i = $index) {
+              <tr>
+                <td><span class="rank">{{ i + 1 }}</span></td>
+                <td>{{ row.operator }}</td>
+                <td class="num">{{ fmt(row.crashes) }}</td>
+                <td class="num">{{ fmt(row.fatalities) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top 10 Regions by Fatalities</div>
+        <table>
+          <thead>
+            <tr><th>#</th><th>Region</th><th>Crashes</th><th>Fatalities</th></tr>
+          </thead>
+          <tbody>
+            @for (row of regions; track row.region; let i = $index) {
+              <tr>
+                <td><span class="rank">{{ i + 1 }}</span></td>
+                <td>{{ row.region }}</td>
+                <td class="num">{{ fmt(row.crashes) }}</td>
+                <td class="num">{{ fmt(row.fatalities) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-label">Recent Activity</div>
+    <div class="card">
+      <div class="card-title">Year-over-Year Change in Crash Count (Last 10 Years)</div>
+      <table>
+        <thead>
+          <tr><th>Year</th><th>Crashes</th><th>Previous Year</th><th>% Change</th></tr>
+        </thead>
+        <tbody>
+          @for (row of yoy; track row.year) {
+            <tr>
+              <td><strong>{{ row.year }}</strong></td>
+              <td class="num">{{ fmt(row.crashes) }}</td>
+              <td class="num muted">{{ fmt(row.previousYearCrashes) }}</td>
+              <td class="num" [style.color]="pctColor(row.pctChange)">
+                {{ pctArrow(row.pctChange) }}
+                {{ row.pctChange != null ? (row.pctChange < 0 ? -row.pctChange : row.pctChange).toFixed(1) + '%' : '—' }}
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-label">Deadliest Crash Per Decade</div>
+    <div class="card">
+      <div class="card-title">Worst Single Crash in Each Decade</div>
+      <table>
+        <thead>
+          <tr><th>Decade</th><th>Date</th><th>Operator</th><th>Location</th><th>Fatalities</th></tr>
+        </thead>
+        <tbody>
+          @for (row of deadliest; track row.decade) {
+            <tr>
+              <td><span class="decade-badge">{{ row.decade }}s</span></td>
+              <td class="muted">{{ row.date }}</td>
+              <td>{{ row.operator }}</td>
+              <td class="muted">{{ row.location }}</td>
+              <td class="num c-pink">{{ fmt(row.fatalities) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+</main>
+
+<footer class="footer">
+  Data: Airplane Crashes and Fatalities Since 1908 &nbsp;&middot;&nbsp;
+  <a href="http://localhost:5050/swagger" target="_blank">API Reference</a>
+</footer>

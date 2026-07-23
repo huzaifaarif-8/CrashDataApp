@@ -1,0 +1,32 @@
+# .NET build output
+bin/
+obj/
+
+# SQLite database (generated on first run)
+*.db
+*.db-shm
+*.db-wal
+
+# Angular build output (built into CrashDataApp/wwwroot)
+CrashDataApp/wwwroot/
+
+# Angular
+node_modules/
+.angular/
+dist/
+
+# macOS
+.DS_Store
+
+# User secrets / local overrides
+appsettings.*.json
+!appsettings.Development.json
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+.idea/
